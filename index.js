@@ -183,51 +183,25 @@ app.get("/produtos", async (req, res) => {
    }  
 })
 
-app.get("/produtos/:id", async (req, res) => {
+app.get("/produto/:id", async (req, res) => {
     try {
         const { id } = req.params
-        const cliente = req.body
 
-        const existente = await db.pool.query(
-            `SELECT id FROM produto WHERE id = ?`,
+        const resultado = await db.pool.query(
+            `GET FROM produto WHERE id = ?`,
             [id]
         )
 
-        if (existente[0].length === 0) {
+        if (resultado[0].affectedRows === 0) {
             return res.status(404).json({ mensagem: "produto não encontrado" })
         }
 
-        let senha = cliente.senha
-        if (senha) {
-            senha = bcrypt.hashSync(senha, 10)
-        }
-        app.put("/cliente/:id", async (req, res) => {
-            try {
-                const { id } = req.params
-                const cliente = req.body
-        
-                const existente = await db.pool.query(
-                    `SELECT id FROM cliente WHERE id = ?`,
-                    [id]
-                )
-        
-                if (existente[0].length === 0) {
-                    return res.status(404).json({ mensagem: "Cliente não encontrado" })
-                }
-        
-                let senha = cliente.senha
-                if (senha) {
-                    senha = bcrypt.hashSync(senha, 10)
-                }
-    }})
-        
-    
-
-        res.status(200).json({ mensagem: "Cliente atualizado" })
+        res.status(200).json({ mensagem: "produto removido" })
     } catch (error) {
         res.status(500).json({ erro: error.message })
     }
 })
+
 
 app.listen(port, () => {
     console.log("API rodando na porta " + port)
