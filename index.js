@@ -202,6 +202,30 @@ app.get("/produto/:id", async (req, res) => {
     }
 })
 
+app.get("/produto", async (req, res) => {
+    try {
+        let sql = "SELECT * FROM produto WHERE 1=1"
+        const params = []
+        // Query Parameter
+        const { busca, ordenacao } = req.query
+        let resultado
+        if (busca) {
+            sql += " AND nome LIKE ?"
+            params.push(`%${busca}%`)
+        } 
+        if (ordenacao) {
+            if (ordenacao == "DESC") {
+                sql += " ORDER BY preco DESC"
+            } else {
+                sql += " ORDER BY preco ASC"
+            }
+        }
+        resultado = await db.pool.query(sql, params)
+        res.status(200).json(resultado[0])
+    } catch (error) {
+        res.status(500).json({erro: error.message})
+    }
+})
 
 app.listen(port, () => {
     console.log("API rodando na porta " + port)
