@@ -58,6 +58,16 @@ app.get("/cliente", async (req, res) => {
     }  
 })
 
+async function carregarProdutos() {
+    let produtos
+    try {
+        produtos = await buscar_produtos()
+            alert(json.stringify())
+    } catch(error) {
+        alert(error)
+    }
+}
+
 
 app.get("/cliente/perfil", autenticar, async (req) => {
     try {
